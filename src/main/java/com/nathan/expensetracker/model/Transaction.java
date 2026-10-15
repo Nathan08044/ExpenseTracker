@@ -21,7 +21,7 @@ public abstract class Transaction {
      * Abstract method that subclass use to get the balance.
      * @return the balance change
      */
-    public abstract double getBalanceChange();
+    public abstract BigDecimal getBalanceChange();
     /**
      * Creates a transaction.
      * @precondition title can not be null
@@ -65,7 +65,7 @@ public abstract class Transaction {
      */
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class Transaction {
      * @return an amount money that spend
      */
     public BigDecimal getAmount() {
-        return amount;
+        return this.amount;
     }
 
     /**
@@ -83,7 +83,7 @@ public abstract class Transaction {
      * @return a category of the transaction
      */
     public String getCategory() {
-        return category;
+        return this.category;
     }
 
     /**
@@ -92,7 +92,7 @@ public abstract class Transaction {
      * @return date of the transaction
      */
     public LocalDate getDate() {
-        return date;
+        return this.date;
     }
 
 }
