@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ExpenseTracker" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.nathan.expensetracker.Launcher" />
+    <module name="ExpenseTracker" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
