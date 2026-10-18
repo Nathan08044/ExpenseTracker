@@ -1,0 +1,104 @@
+package com.nathan.expensetracker;
+
+import com.nathan.expensetracker.model.Expense;
+import com.nathan.expensetracker.model.Income;
+import com.nathan.expensetracker.model.Transaction;
+import com.nathan.expensetracker.model.TransactionManager;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+public class TrackerController {
+    @FXML
+    private Label welcomeText;
+
+    @FXML
+    private Label incomeLabel;
+
+    @FXML
+    private Label expenseLabel;
+
+    @FXML
+    private Label balanceLabel;
+
+    @FXML
+    private TextField titleField;
+
+    @FXML
+    private TextField amountField;
+
+    @FXML
+    private TextField categoryField;
+
+    @FXML
+    private ComboBox<String> typeComboBox;
+
+    @FXML
+    private DatePicker datePicker;
+
+    @FXML
+    private Button addButton;
+
+    @FXML
+    protected void onHelloButtonClick() {
+        welcomeText.setText("Welcome to JavaFX Application!");
+    }
+
+    @FXML
+    private void initialize() {
+        this.typeComboBox.getItems().setAll("Income", "Expense");
+        this.typeComboBox.setValue("Expense");
+        this.datePicker.setValue(LocalDate.now());
+        this.updateTotal();
+
+    }
+
+    private final TransactionManager transactionManager = new TransactionManager();
+
+    /**
+     * Updates the display incomes, expense and balance.
+     */
+    private void updateTotal(){
+        this.incomeLabel.setText("Income: $" + this.transactionManager.getTotalIncome());
+
+        this.expenseLabel.setText("Expense: $" + this.transactionManager.getTotalExpense());
+
+        this.balanceLabel.setText("Balance: $" + this.transactionManager.getBalance());
+    }
+
+    @FXML
+    private void handleAddTransaction() {
+        try {
+            String title = this.titleField.getText();
+            String category = this.categoryField.getText();
+            String type = this.typeComboBox.getValue();
+            LocalDate date = this.datePicker.getValue();
+            String amountText = this.amountField.getText();
+            BigDecimal amount = new BigDecimal(amountText.trim());
+
+            Transaction transaction;
+
+            if ("Income".equals(type)) {
+                transaction = new Income(title, amount, category, date);
+            } else if ("Expense".equals(type)) {
+                transaction = new Expense(title, amount, category, date);
+            } else {
+                throw new IllegalArgumentException("Please select Income or Expense.");
+            }
+            this.transactionManager.addTransaction(transaction);
+            this.updateTotal();
+        } catch (NumberFormatException theException) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Enter a valid amount, such as 15.50");
+            alert.showAndWait();
+        } catch (IllegalArgumentException theException) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(theException.getMessage());
+            alert.showAndWait();
+        }
+
+
+    }
+}

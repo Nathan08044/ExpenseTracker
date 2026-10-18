@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" spacing="15.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/26" fx:controller="com.nathan.expensetracker.HelloController">
+<VBox prefHeight="600.0" prefWidth="900.0" spacing="15.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nathan.expensetracker.TrackerController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -40,7 +40,7 @@
       <children>
          <ComboBox fx:id="typeComboBox" prefWidth="150.0" promptText="Type" />
          <DatePicker fx:id="datePicker" promptText="Date" />
-         <Button mnemonicParsing="false" text="Add transaction" />
+         <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddTransaction" text="Add transaction" />
       </children>
    </HBox>
 </VBox>
