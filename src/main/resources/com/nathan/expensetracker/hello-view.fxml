@@ -5,6 +5,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -43,4 +45,10 @@
          <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddTransaction" text="Add transaction" />
       </children>
    </HBox>
+   <TableView fx:id="transactionTable" prefHeight="300.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <columns>
+         <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title" />
+         <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Amount" />
+      </columns>
+   </TableView>
 </VBox>

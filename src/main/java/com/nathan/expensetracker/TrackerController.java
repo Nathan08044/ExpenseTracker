@@ -4,6 +4,8 @@ import com.nathan.expensetracker.model.Expense;
 import com.nathan.expensetracker.model.Income;
 import com.nathan.expensetracker.model.Transaction;
 import com.nathan.expensetracker.model.TransactionManager;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -42,6 +44,17 @@ public class TrackerController {
     private Button addButton;
 
     @FXML
+    private TableView<Transaction> transactionTable;
+
+    @FXML
+    private TableColumn<Transaction, String> titleColumn;
+
+    @FXML
+    private TableColumn<Transaction, BigDecimal> amountColumn;
+
+
+
+    @FXML
     protected void onHelloButtonClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
     }
@@ -52,6 +65,14 @@ public class TrackerController {
         this.typeComboBox.setValue("Expense");
         this.datePicker.setValue(LocalDate.now());
         this.updateTotal();
+        this.titleColumn.setCellValueFactory(cellData ->
+                new ReadOnlyStringWrapper(cellData.getValue().getTitle()));
+
+        this.amountColumn.setCellValueFactory(cellData -> {
+            Transaction transaction = cellData.getValue();
+            BigDecimal amount = transaction.getAmount();
+            return new ReadOnlyObjectWrapper<BigDecimal>(amount);
+        });
 
     }
 
@@ -66,6 +87,7 @@ public class TrackerController {
         this.expenseLabel.setText("Expense: $" + this.transactionManager.getTotalExpense());
 
         this.balanceLabel.setText("Balance: $" + this.transactionManager.getBalance());
+
     }
 
     @FXML
@@ -89,6 +111,7 @@ public class TrackerController {
             }
             this.transactionManager.addTransaction(transaction);
             this.updateTotal();
+            this.updateTable();
         } catch (NumberFormatException theException) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Enter a valid amount, such as 15.50");
@@ -99,6 +122,8 @@ public class TrackerController {
             alert.showAndWait();
         }
 
-
+    }
+    private void updateTable(){
+        this.transactionTable.getItems().setAll(this.transactionManager.getTransactions());
     }
 }
