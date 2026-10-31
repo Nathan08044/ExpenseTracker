@@ -121,9 +121,27 @@ public class TrackerController {
             alert.setContentText(theException.getMessage());
             alert.showAndWait();
         }
-
     }
     private void updateTable(){
         this.transactionTable.getItems().setAll(this.transactionManager.getTransactions());
     }
+
+    /**
+     * Handle a request to delete the transaction.
+     */
+    @FXML
+    private void handleDeleteTransaction(){
+        Transaction selectedTransaction = this.transactionTable.getSelectionModel().getSelectedItem();
+        if (selectedTransaction == null) {
+            Alert theAlert = new Alert(Alert.AlertType.WARNING);
+            theAlert.setContentText("Please select a transaction to delete.");
+            theAlert.showAndWait();
+            return;
+        }
+        this.transactionManager.removeTransaction(selectedTransaction);
+        this.updateTotal();
+        this.updateTable();
+    }
+
+
 }

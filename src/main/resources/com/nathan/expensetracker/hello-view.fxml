@@ -43,6 +43,7 @@
          <ComboBox fx:id="typeComboBox" prefWidth="150.0" promptText="Type" />
          <DatePicker fx:id="datePicker" promptText="Date" />
          <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddTransaction" text="Add transaction" />
+         <Button mnemonicParsing="false" onAction="#handleDeleteTransaction" text="Delete selected" />
       </children>
    </HBox>
    <TableView fx:id="transactionTable" prefHeight="300.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
