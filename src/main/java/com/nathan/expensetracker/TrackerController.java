@@ -55,6 +55,9 @@ public class TrackerController {
     @FXML
     private TableColumn<Transaction, LocalDate> dateColumn;
 
+    @FXML
+    private TableColumn<Transaction, String> categoryColumn;
+
 
 
     @FXML
@@ -81,6 +84,12 @@ public class TrackerController {
             Transaction theTransaction = cellData.getValue();
             LocalDate theDate = theTransaction.getDate();
             return new ReadOnlyObjectWrapper<LocalDate>(theDate);
+        });
+
+        this.categoryColumn.setCellValueFactory(cellData -> {
+            Transaction theTransaction = cellData.getValue();
+            String theCategory = theTransaction.getCategory();
+            return new ReadOnlyStringWrapper(theCategory);
         });
 
     }
