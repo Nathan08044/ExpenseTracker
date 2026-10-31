@@ -52,6 +52,9 @@ public class TrackerController {
     @FXML
     private TableColumn<Transaction, BigDecimal> amountColumn;
 
+    @FXML
+    private TableColumn<Transaction, LocalDate> dateColumn;
+
 
 
     @FXML
@@ -72,6 +75,12 @@ public class TrackerController {
             Transaction transaction = cellData.getValue();
             BigDecimal amount = transaction.getAmount();
             return new ReadOnlyObjectWrapper<BigDecimal>(amount);
+        });
+
+        this.dateColumn.setCellValueFactory(cellData -> {
+            Transaction theTransaction = cellData.getValue();
+            LocalDate theDate = theTransaction.getDate();
+            return new ReadOnlyObjectWrapper<LocalDate>(theDate);
         });
 
     }
