@@ -31,6 +31,14 @@ public class Income extends Transaction {
     public BigDecimal getBalanceChange() {
         return this.getAmount();
     }
+
+    /**
+     * Return type of category.
+     */
+    @Override
+    public String getType(){
+        return "Income";
+    }
 }
 
 

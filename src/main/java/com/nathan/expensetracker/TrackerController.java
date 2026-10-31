@@ -58,6 +58,9 @@ public class TrackerController {
     @FXML
     private TableColumn<Transaction, String> categoryColumn;
 
+    @FXML
+    private TableColumn<Transaction, String> typeColumn;
+
 
 
     @FXML
@@ -90,6 +93,12 @@ public class TrackerController {
             Transaction theTransaction = cellData.getValue();
             String theCategory = theTransaction.getCategory();
             return new ReadOnlyStringWrapper(theCategory);
+        });
+
+        this.typeColumn.setCellValueFactory(cellData -> {
+            Transaction theTransaction = cellData.getValue();
+            String theType = theTransaction.getType();
+            return new ReadOnlyStringWrapper(theType);
         });
 
     }

@@ -52,6 +52,7 @@
          <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Amount" />
          <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Date" />
          <TableColumn fx:id="categoryColumn" prefWidth="75.0" text="Category" />
+         <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Type" />
       </columns>
    </TableView>
 </VBox>

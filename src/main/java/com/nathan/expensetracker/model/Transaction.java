@@ -95,4 +95,6 @@ public abstract class Transaction {
         return this.date;
     }
 
+    public abstract String getType();
+
 }

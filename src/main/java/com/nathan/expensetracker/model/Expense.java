@@ -32,5 +32,13 @@ public class Expense extends Transaction{
         return this.getAmount().negate();
     }
 
+    /**
+     * Return type of category.
+     */
+    @Override
+    public String getType(){
+        return "Expense";
+    }
+
 
 }
