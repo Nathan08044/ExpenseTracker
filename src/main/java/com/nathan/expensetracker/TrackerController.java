@@ -112,6 +112,7 @@ public class TrackerController {
             this.transactionManager.addTransaction(transaction);
             this.updateTotal();
             this.updateTable();
+            this.clearForm();
         } catch (NumberFormatException theException) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Enter a valid amount, such as 15.50");
@@ -141,6 +142,16 @@ public class TrackerController {
         this.transactionManager.removeTransaction(selectedTransaction);
         this.updateTotal();
         this.updateTable();
+    }
+
+    /**
+     * Clears the text fields after a successful addition.
+     */
+    private void clearForm() {
+        this.titleField.clear();
+        this.amountField.clear();
+        this.categoryField.clear();
+        this.titleField.requestFocus();
     }
 
 
