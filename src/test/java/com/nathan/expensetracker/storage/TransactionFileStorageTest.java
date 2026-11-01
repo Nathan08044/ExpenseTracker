@@ -33,4 +33,25 @@ public class TransactionFileStorageTest {
         assertEquals(List.of("type, title, amount, category, date", "Expense,\"Lunch\",15.50,\"Food\",2026-10-31"), savedLines);
 
     }
+
+    @Test
+    public void testSaveAndLoadTransaction() throws IOException {
+        TransactionFileStorage theStorage = new TransactionFileStorage();
+
+        Transaction lunch = new Expense("Lunch", new BigDecimal("15.50"),"Food",LocalDate.of(2026, 10,31));
+        Path filePath = temporaryFolder.resolve("transactions.csv");
+        theStorage.saveTransactions(List.of(lunch), filePath);
+        List<Transaction> loadedTransactions = theStorage.loadTransactions(filePath);
+
+        assertEquals(1, loadedTransactions.size());
+
+        Transaction loadedCurrentTransaction = loadedTransactions.get(0);
+        assertEquals("Expense", loadedCurrentTransaction.getType());
+        assertEquals("Lunch", loadedCurrentTransaction.getTitle());
+        assertEquals(new BigDecimal("15.50"), loadedCurrentTransaction.getAmount());
+        assertEquals("Food", loadedCurrentTransaction.getCategory());
+        assertEquals(LocalDate.of(2026, 10, 31), loadedCurrentTransaction.getDate());
+
+
+    }
 }
