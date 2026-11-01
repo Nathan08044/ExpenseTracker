@@ -52,6 +52,16 @@ public class TransactionFileStorageTest {
         assertEquals("Food", loadedCurrentTransaction.getCategory());
         assertEquals(LocalDate.of(2026, 10, 31), loadedCurrentTransaction.getDate());
 
+    }
+
+    @Test
+    public void testLoadWhenFileDoesNotExist() throws IOException {
+        TransactionFileStorage theStorage = new TransactionFileStorage();
+
+        Path filePath = temporaryFolder.resolve("missing.csv");
+        List<Transaction> loadedTransactions = theStorage.loadTransactions(filePath);
+
+        assertEquals(0, loadedTransactions.size());
 
     }
 }
