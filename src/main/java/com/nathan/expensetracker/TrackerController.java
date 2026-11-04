@@ -213,6 +213,12 @@ public class TrackerController {
             theAlert.showAndWait();
             return;
         }
+        List<Transaction> transactionsToSave = new ArrayList<>(this.transactionManager.getTransactions());
+        transactionsToSave.remove(selectedTransaction);
+
+        if (!this.savedTransactions(transactionsToSave)) {
+            return;
+        }
         this.transactionManager.removeTransaction(selectedTransaction);
         this.updateTotal();
         this.updateTable();
