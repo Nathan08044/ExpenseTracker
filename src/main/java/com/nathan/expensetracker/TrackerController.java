@@ -4,13 +4,20 @@ import com.nathan.expensetracker.model.Expense;
 import com.nathan.expensetracker.model.Income;
 import com.nathan.expensetracker.model.Transaction;
 import com.nathan.expensetracker.model.TransactionManager;
+import com.nathan.expensetracker.storage.TransactionFileStorage;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrackerController {
     @FXML
@@ -73,7 +80,6 @@ public class TrackerController {
         this.typeComboBox.getItems().setAll("Income", "Expense");
         this.typeComboBox.setValue("Expense");
         this.datePicker.setValue(LocalDate.now());
-        this.updateTotal();
         this.titleColumn.setCellValueFactory(cellData ->
                 new ReadOnlyStringWrapper(cellData.getValue().getTitle()));
 
@@ -100,10 +106,43 @@ public class TrackerController {
             String theType = theTransaction.getType();
             return new ReadOnlyStringWrapper(theType);
         });
+        this.loadSavedTransactions();
+        this.updateTable();
+        this.updateTotal();
 
     }
 
+    private void loadSavedTransactions(){
+        try {
+            List<Transaction> savedTransactions = this.fileStorage.loadTransactions(this.transactionFilePath);
+            for (Transaction theTransaction : savedTransactions) {
+                this.transactionManager.addTransaction(theTransaction);
+            }
+        } catch (IOException | IllegalArgumentException | DateTimeParseException theException) {
+            this.loadingFailed = true;
+            Alert theAlert = new Alert(Alert.AlertType.ERROR, "Could not load saved transactions: " + theException.getMessage());
+            theAlert.showAndWait();
+        }
+    }
+
+    private boolean savedTransactions (List<Transaction> transactions) {
+        try {
+            if (this.loadingFailed) {
+                throw new IOException("The existing file could not be loaded.");
+            }
+            this.fileStorage.saveTransactions(transactions, this.transactionFilePath);
+            return true;
+        } catch (IOException theException) {
+            Alert theAlert = new Alert(Alert.AlertType.ERROR, "Could not save the transaction: " + theException.getMessage());
+            theAlert.showAndWait();
+            return false;
+        }
+    }
+
     private final TransactionManager transactionManager = new TransactionManager();
+    private final TransactionFileStorage fileStorage = new TransactionFileStorage();
+    private final Path transactionFilePath = Paths.get(System.getProperty("user.home"), "expense-tracker-transactions.csv");
+    private boolean loadingFailed = false;
 
     /**
      * Updates the display incomes, expense and balance.
@@ -136,6 +175,14 @@ public class TrackerController {
             } else {
                 throw new IllegalArgumentException("Please select Income or Expense.");
             }
+            List<Transaction> transactionsToSave = new ArrayList<>(this.transactionManager.getTransactions());
+
+            transactionsToSave.add(transaction);
+
+            if (!this.savedTransactions(transactionsToSave)) {
+                return;
+            }
+
             this.transactionManager.addTransaction(transaction);
             this.updateTotal();
             this.updateTable();
