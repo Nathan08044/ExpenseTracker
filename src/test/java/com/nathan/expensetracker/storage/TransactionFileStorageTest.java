@@ -69,7 +69,7 @@ public class TransactionFileStorageTest {
     public void testSaveAndLoadTitleWithCommaAndQuotes() throws IOException {
         TransactionFileStorage theStorage = new TransactionFileStorage();
 
-        Transaction lunch = new Expense ("Lunch with \"friend\"", new BigDecimal("15.50"), "Food", LocalDate.of(2026, 11,04));
+        Transaction lunch = new Expense ("Lunch with \"friend\"", new BigDecimal("15.50"), "Food", LocalDate.of(2026, 11,4));
 
         Path filePath = temporaryFolder.resolve("transactions.csv");
 
