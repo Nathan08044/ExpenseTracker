@@ -64,4 +64,19 @@ public class TransactionFileStorageTest {
         assertEquals(0, loadedTransactions.size());
 
     }
+
+    @Test
+    public void testSaveAndLoadTitleWithCommaAndQuotes() throws IOException {
+        TransactionFileStorage theStorage = new TransactionFileStorage();
+
+        Transaction lunch = new Expense ("Lunch with \"friend\"", new BigDecimal("15.50"), "Food", LocalDate.of(2026, 11,04));
+
+        Path filePath = temporaryFolder.resolve("transactions.csv");
+
+        theStorage.saveTransactions(List.of(lunch), filePath);
+        List<Transaction> loadedTransactions = theStorage.loadTransactions(filePath);
+
+        assertEquals(1, loadedTransactions.size());
+        assertEquals("Lunch with \"friend\"", loadedTransactions.get(0).getTitle());
+    }
 }

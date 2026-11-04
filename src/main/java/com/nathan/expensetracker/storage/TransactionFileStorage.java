@@ -24,7 +24,7 @@ public class TransactionFileStorage {
      * @param filePath the destination file
      */
     public void saveTransactions (List<Transaction> transactions, Path filePath) throws IOException {
-        List<String> lines = new ArrayList<String>();
+        List<String> lines = new ArrayList<>();
         lines.add("type,title,amount,category,date");
 
         for(Transaction currentTransaction : transactions) {
