@@ -111,7 +111,7 @@
                <Button mnemonicParsing="false" onAction="#handleDeleteTransaction" text="Delete selected" />
             </children>
          </HBox>
-         <TableView fx:id="transactionTable" prefHeight="300.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <TableView fx:id="transactionTable" prefHeight="300.0" prefWidth="200.0" VBox.vgrow="ALWAYS" stylesheets="@transactions.css">
             <columns>
                <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title" />
                <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Amount" />

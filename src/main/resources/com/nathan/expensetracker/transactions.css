@@ -1,0 +1,33 @@
+.table-view .column-header,
+.table-view .filler{
+    -fx-background-color: #EDF1F8;
+}
+.table-view .table-row-cell:filled:odd {
+    -fx-background-color: #F7F9FC;
+
+}
+.table-row-cell:filled:selected {
+    -fx-background-color: #E8EAFF;
+}
+.table-view {
+    -fx-fixed-cell-size: 36px;
+}
+.table-view .column-header .label {
+    -fx-text-fill: #344054;
+    -fx-font-weight: bold;
+}
+.income-badge {
+    -fx-background-color: #EAF7F0;
+    -fx-text-fill: #087A5C;
+    -fx-background-radius: 12px;
+    -fx-padding: 3px 10px;
+}
+.expense-badge {
+    -fx-background-color: #FCECEF;
+    -fx-text-fill: #C8103D;
+    -fx-background-radius: 12px;
+    -fx-padding: 3px 10px;
+}
+
+
+

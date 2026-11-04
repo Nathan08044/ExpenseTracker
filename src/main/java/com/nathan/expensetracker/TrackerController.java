@@ -106,6 +106,31 @@ public class TrackerController {
             String theType = theTransaction.getType();
             return new ReadOnlyStringWrapper(theType);
         });
+        this.typeColumn.setCellFactory(column -> new TableCell<Transaction, String>() {
+            private final Label badge = new Label();
+
+            @Override
+            protected void updateItem(String type, boolean empty) {
+                super.updateItem(type, empty);
+
+                if (empty || type == null) {
+                    setGraphic(null);
+                    return;
+                }
+
+                badge.setText(type);
+                badge.getStyleClass().removeAll("income-badge", "expense-badge");
+
+                if ("Income".equals(type)) {
+                    badge.getStyleClass().add("income-badge");
+                } else {
+                    badge.getStyleClass().add("expense-badge");
+                }
+                setGraphic(badge);
+            }
+
+        });
+        this.transactionTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         this.loadSavedTransactions();
         this.updateTable();
         this.updateTotal();
