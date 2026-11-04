@@ -148,11 +148,11 @@ public class TrackerController {
      * Updates the display incomes, expense and balance.
      */
     private void updateTotal(){
-        this.incomeLabel.setText("Income: $" + this.transactionManager.getTotalIncome());
+        this.incomeLabel.setText("$" + this.transactionManager.getTotalIncome());
 
-        this.expenseLabel.setText("Expense: $" + this.transactionManager.getTotalExpense());
+        this.expenseLabel.setText("$" + this.transactionManager.getTotalExpense());
 
-        this.balanceLabel.setText("Balance: $" + this.transactionManager.getBalance());
+        this.balanceLabel.setText("$" + this.transactionManager.getBalance());
 
     }
 
