@@ -76,11 +76,6 @@ public class TrackerController {
 
 
     @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
-
-    @FXML
     private void initialize() {
         this.typeComboBox.getItems().setAll("Income", "Expense");
         this.typeComboBox.setValue("Expense");

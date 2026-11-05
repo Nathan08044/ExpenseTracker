@@ -11,6 +11,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="600.0" prefWidth="900.0" spacing="15.0" style="-fx-background-color: #F4F6FA;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nathan.expensetracker.TrackerController">
@@ -20,26 +23,38 @@
 
     <Label fx:id="welcomeText" alignment="TOP_LEFT" text="Expense Tracker">
       <font>
-         <Font name="System Bold" size="36.0" />
+         <Font name="Avenir Black Oblique" size="38.0" />
       </font>
       <padding>
          <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       </padding></Label>
-   <Label text="A clearer view of your everyday spending" textFill="#667085" />
+   <Label text="A clearer view of your everyday spending" textFill="#667085">
+      <font>
+         <Font name="Avenir Black" size="13.0" />
+      </font></Label>
    <HBox spacing="16.0" VBox.vgrow="NEVER">
       <children>
          <VBox prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #EAF7F0; -fx-background-radius: 12;" HBox.hgrow="ALWAYS">
             <children>
-               <Label style="-fx-background-color: #EAF7F0; -fx-background-radius: 12;" text="Total income">
-                  <padding>
-                     <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                  </padding>
-               </Label>
-               <Label fx:id="incomeLabel" text="\$0.00 " textFill="#087a5c">
-                  <font>
-                     <Font size="28.0" />
-                  </font>
-               </Label>
+               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="16.0">
+                  <children>
+                     <Label alignment="CENTER" maxHeight="48.0" maxWidth="48.0" minHeight="48.0" minWidth="48.0" prefHeight="48.0" prefWidth="48.0" style="-fx-background-color: #D5F2E8; -fx-background-radius: 24;" text="↗" textFill="#087a5c">
+                        <font>
+                           <Font size="28.0" />
+                        </font>
+                     </Label>
+                     <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                        <children>
+                           <Label style="-fx-background-color: #EAF7F0; -fx-background-radius: 12;" text="Total income" />
+                           <Label fx:id="incomeLabel" text="\$0.00 " textFill="#087a5c">
+                              <font>
+                                 <Font size="28.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </VBox>
+                  </children>
+               </HBox>
             </children>
             <padding>
                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -47,16 +62,25 @@
          </VBox>
          <VBox prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #FCECEF; -fx-background-radius: 12;" HBox.hgrow="ALWAYS">
             <children>
-               <Label style="-fx-background-color: #FCECEF; -fx-background-radius: 12;" text="Total expenses">
-                  <padding>
-                     <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                  </padding>
-               </Label>
-               <Label fx:id="expenseLabel" text="\$0.00" textFill="#c8103d">
-                  <font>
-                     <Font size="28.0" />
-                  </font>
-               </Label>
+               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="16.0">
+                  <children>
+                     <Label alignment="CENTER" maxHeight="48.0" maxWidth="48.0" minHeight="48.0" minWidth="48.0" prefHeight="48.0" prefWidth="48.0" style="-fx-background-color: #FADCE4; -fx-background-radius: 24;" text="↓" textFill="#c8103d">
+                        <font>
+                           <Font size="28.0" />
+                        </font>
+                     </Label>
+                     <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                        <children>
+                           <Label style="-fx-background-color: #FCECEF; -fx-background-radius: 12;" text="Total expenses" />
+                           <Label fx:id="expenseLabel" text="\$0.00" textFill="#c8103d">
+                              <font>
+                                 <Font size="28.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </VBox>
+                  </children>
+               </HBox>
             </children>
             <padding>
                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -64,16 +88,41 @@
          </VBox>
          <VBox prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #EAF2FF; -fx-background-radius: 12;" HBox.hgrow="ALWAYS">
             <children>
-               <Label style="-fx-background-color: #EAF2FF; -fx-background-radius: 12;" text="Current balance">
-                  <padding>
-                     <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                  </padding>
-               </Label>
-               <Label fx:id="balanceLabel" text="\$0.00" textFill="#2945c7">
-                  <font>
-                     <Font size="28.0" />
-                  </font>
-               </Label>
+               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="16.0">
+                  <children>
+                     <Label alignment="CENTER" lineSpacing="16.0" maxHeight="48.0" maxWidth="48.0" minHeight="48.0" minWidth="48.0" prefHeight="48.0" prefWidth="48.0" style="-fx-background-color: #DCE8FF; -fx-background-radius: 24;" text="\$" textOverrun="CLIP">
+                        <font>
+                           <Font name="Arial Black" size="28.0" />
+                        </font>
+                        <textFill>
+                           <LinearGradient endX="1.0" endY="1.0">
+                              <stops>
+                                 <Stop>
+                                    <color>
+                                       <Color />
+                                    </color>
+                                 </Stop>
+                                 <Stop offset="1.0">
+                                    <color>
+                                       <Color red="0.16078431904315948" green="0.2705882489681244" blue="0.7803921699523926" />
+                                    </color>
+                                 </Stop>
+                              </stops>
+                           </LinearGradient>
+                        </textFill>
+                     </Label>
+                     <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                        <children>
+                           <Label style="-fx-background-color: #EAF2FF; -fx-background-radius: 12;" text="Current balance" />
+                           <Label fx:id="balanceLabel" text="\$0.00" textFill="#2945c7">
+                              <font>
+                                 <Font size="28.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </VBox>
+                  </children>
+               </HBox>
             </children>
             <padding>
                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -142,7 +191,7 @@
                <Button mnemonicParsing="false" onAction="#handleDeleteTransaction" text="Delete selected" />
             </children>
          </HBox>
-         <TableView fx:id="transactionTable" prefHeight="300.0" prefWidth="200.0" VBox.vgrow="ALWAYS" stylesheets="@transactions.css">
+         <TableView fx:id="transactionTable" prefHeight="300.0" prefWidth="200.0" stylesheets="@transactions.css" VBox.vgrow="ALWAYS">
             <columns>
                <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title" />
                <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Amount" />
@@ -151,7 +200,13 @@
                <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Type" />
             </columns>
          </TableView>
-         <Label fx:id="transactionCountLabel" text="0 Transaction" textFill="#667085" />
+         <HBox prefHeight="100.0" prefWidth="200.0">
+            <children>
+               <Label fx:id="transactionCountLabel" text="0 Transaction" textFill="#667085" />
+               <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+               <Label text="Store locally on your device" textFill="#667085" />
+            </children>
+         </HBox>
       </children>
       <padding>
          <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
