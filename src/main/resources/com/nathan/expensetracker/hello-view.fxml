@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" spacing="15.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nathan.expensetracker.TrackerController">
+<VBox prefHeight="600.0" prefWidth="900.0" spacing="15.0" style="-fx-background-color: #F4F6FA;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nathan.expensetracker.TrackerController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -26,9 +26,9 @@
          <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       </padding></Label>
    <Label text="A clearer view of your everyday spending" textFill="#667085" />
-   <HBox spacing="16.0">
+   <HBox spacing="16.0" VBox.vgrow="NEVER">
       <children>
-         <VBox prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #EAF7F0; -fx-background-radius: 12;">
+         <VBox prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #EAF7F0; -fx-background-radius: 12;" HBox.hgrow="ALWAYS">
             <children>
                <Label style="-fx-background-color: #EAF7F0; -fx-background-radius: 12;" text="Total income">
                   <padding>
@@ -41,8 +41,11 @@
                   </font>
                </Label>
             </children>
+            <padding>
+               <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+            </padding>
          </VBox>
-         <VBox prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #FCECEF; -fx-background-radius: 12;">
+         <VBox prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #FCECEF; -fx-background-radius: 12;" HBox.hgrow="ALWAYS">
             <children>
                <Label style="-fx-background-color: #FCECEF; -fx-background-radius: 12;" text="Total expenses">
                   <padding>
@@ -55,8 +58,11 @@
                   </font>
                </Label>
             </children>
+            <padding>
+               <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+            </padding>
          </VBox>
-         <VBox prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #EAF2FF; -fx-background-radius: 12;">
+         <VBox prefHeight="200.0" prefWidth="240.0" style="-fx-background-color: #EAF2FF; -fx-background-radius: 12;" HBox.hgrow="ALWAYS">
             <children>
                <Label style="-fx-background-color: #EAF2FF; -fx-background-radius: 12;" text="Current balance">
                   <padding>
@@ -69,30 +75,55 @@
                   </font>
                </Label>
             </children>
+            <padding>
+               <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+            </padding>
          </VBox>
       </children>
    </HBox>
-   <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 12;">
+   <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 12;" VBox.vgrow="NEVER">
       <children>
          <Label text="Add transaction">
             <font>
                <Font name="System Bold" size="18.0" />
             </font>
          </Label>
-         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <HBox alignment="BOTTOM_LEFT" fillHeight="false" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
             <children>
-               <TextField fx:id="titleField" prefWidth="200.0" promptText="Title" />
-               <TextField fx:id="amountField" prefWidth="120.0" promptText="Amount" />
-               <TextField fx:id="categoryField" prefWidth="150.0" promptText="Category" />
+               <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="150.0">
+                  <children>
+                     <Label text="Title" />
+                     <TextField fx:id="titleField" prefWidth="200.0" promptText="Title" />
+                  </children>
+               </VBox>
+               <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="100.0">
+                  <children>
+                     <Label text="Amount" />
+                     <TextField fx:id="amountField" prefWidth="120.0" promptText="Amount" />
+                  </children>
+               </VBox>
+               <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="130.0">
+                  <children>
+                     <Label text="Category" />
+                     <TextField fx:id="categoryField" prefWidth="150.0" promptText="Category" />
+                  </children>
+               </VBox>
+               <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="100.0">
+                  <children>
+                     <Label text="Type" />
+                     <ComboBox fx:id="typeComboBox" prefWidth="150.0" promptText="Type" />
+                  </children>
+               </VBox>
+               <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="145.0">
+                  <children>
+                     <Label text="Date" />
+                     <DatePicker fx:id="datePicker" promptText="Date" />
+                  </children>
+               </VBox>
+               <Button fx:id="addButton" alignment="TOP_LEFT" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleAddTransaction" style="-fx-background-color: #4355D4; -fx-text-fill: white; -fx-background-radius: 8;" text="Add transaction" />
             </children>
          </HBox>
-         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-            <children>
-               <ComboBox fx:id="typeComboBox" prefWidth="150.0" promptText="Type" />
-               <DatePicker fx:id="datePicker" promptText="Date" />
-               <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddTransaction" style="-fx-background-color: #4355D4; -fx-text-fill: white; -fx-background-radius: 8;" text="Add transaction" />
-            </children>
-         </HBox>
+         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" />
       </children>
       <padding>
          <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -120,6 +151,7 @@
                <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Type" />
             </columns>
          </TableView>
+         <Label fx:id="transactionCountLabel" text="0 Transaction" textFill="#667085" />
       </children>
       <padding>
          <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />

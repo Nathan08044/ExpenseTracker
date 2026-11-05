@@ -14,10 +14,12 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class TrackerController {
     @FXML
@@ -68,6 +70,9 @@ public class TrackerController {
     @FXML
     private TableColumn<Transaction, String> typeColumn;
 
+    @FXML
+    private Label transactionCountLabel;
+
 
 
     @FXML
@@ -87,6 +92,19 @@ public class TrackerController {
             Transaction transaction = cellData.getValue();
             BigDecimal amount = transaction.getAmount();
             return new ReadOnlyObjectWrapper<BigDecimal>(amount);
+        });
+        this.amountColumn.getStyleClass().add("amount-cell");
+        this.amountColumn.setCellFactory(column ->new TableCell<Transaction, BigDecimal>() {
+            @Override
+            protected void updateItem(BigDecimal amount, boolean empty) {
+                super.updateItem(amount, empty);
+
+                if (empty || amount == null) {
+                    setText(null);
+                } else {
+                    setText(currencyFormat.format(amount));
+                }
+            }
         });
 
         this.dateColumn.setCellValueFactory(cellData -> {
@@ -131,6 +149,22 @@ public class TrackerController {
 
         });
         this.transactionTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+        this.transactionTable.setRowFactory(table -> new TableRow<Transaction>() {
+            @Override
+            protected void updateItem(Transaction theTransaction, boolean empty) {
+                super.updateItem(theTransaction, empty);
+
+                getStyleClass().removeAll("income-row", "expense-row");
+
+                if (!empty && theTransaction != null) {
+                    if ("Income".equals(theTransaction.getType())) {
+                        getStyleClass().add("income-row");
+                    } else {
+                        getStyleClass().add("expense-row");
+                    }
+                }
+            }
+        });
         this.loadSavedTransactions();
         this.updateTable();
         this.updateTotal();
@@ -168,16 +202,17 @@ public class TrackerController {
     private final TransactionFileStorage fileStorage = new TransactionFileStorage();
     private final Path transactionFilePath = Paths.get(System.getProperty("user.home"), "expense-tracker-transactions.csv");
     private boolean loadingFailed = false;
+    private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
     /**
      * Updates the display incomes, expense and balance.
      */
     private void updateTotal(){
-        this.incomeLabel.setText("$" + this.transactionManager.getTotalIncome());
+        this.incomeLabel.setText(this.currencyFormat.format(transactionManager.getTotalIncome()));
 
-        this.expenseLabel.setText("$" + this.transactionManager.getTotalExpense());
+        this.expenseLabel.setText(this.currencyFormat.format(transactionManager.getTotalExpense()));
 
-        this.balanceLabel.setText("$" + this.transactionManager.getBalance());
+        this.balanceLabel.setText(this.currencyFormat.format(transactionManager.getBalance()));
 
     }
 
@@ -224,6 +259,10 @@ public class TrackerController {
     }
     private void updateTable(){
         this.transactionTable.getItems().setAll(this.transactionManager.getTransactions());
+
+        int count = this.transactionTable.getItems().size();
+        String word = (count == 1) ? "transaction" : "transactions";
+        this.transactionCountLabel.setText(count + " " + word);
     }
 
     /**
