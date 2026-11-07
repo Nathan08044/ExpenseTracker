@@ -16,12 +16,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class TrackerController {
+    @FXML
+    private ComboBox<String> monthCombobox;
     @FXML
     private Label welcomeText;
 
@@ -75,10 +78,15 @@ public class TrackerController {
 
 
 
+
     @FXML
     private void initialize() {
         this.typeComboBox.getItems().setAll("Income", "Expense");
         this.typeComboBox.setValue("Expense");
+        this.monthCombobox.getItems().add("All months");
+        this.monthCombobox.getItems().add(YearMonth.now().toString());
+        this.monthCombobox.setValue("All months");
+        this.monthCombobox.setOnAction(event -> updateTable());
         this.datePicker.setValue(LocalDate.now());
         this.titleColumn.setCellValueFactory(cellData ->
                 new ReadOnlyStringWrapper(cellData.getValue().getTitle()));
@@ -161,6 +169,7 @@ public class TrackerController {
             }
         });
         this.loadSavedTransactions();
+        this.refreshMonthOptions();
         this.updateTable();
         this.updateTotal();
 
@@ -252,12 +261,38 @@ public class TrackerController {
             alert.showAndWait();
         }
     }
+
+    private void refreshMonthOptions(){
+        for (Transaction currentTransaction : this.transactionManager.getTransactions()) {
+            String transactionMonth = YearMonth.from(currentTransaction.getDate()).toString();
+
+            if (!this.monthCombobox.getItems().contains(transactionMonth)) {
+                this.monthCombobox.getItems().add(transactionMonth);
+            }
+        }
+    }
+
+
+
+
+
     private void updateTable(){
-        this.transactionTable.getItems().setAll(this.transactionManager.getTransactions());
+        String selectedMonth = this.monthCombobox.getValue();
 
         int count = this.transactionTable.getItems().size();
         String word = (count == 1) ? "transaction" : "transactions";
         this.transactionCountLabel.setText(count + " " + word);
+        List<Transaction> visibleTransactions = new ArrayList<Transaction>();
+        for (var transaction : this.transactionManager.getTransactions()) {
+            String transactionMonth = YearMonth.from(transaction.getDate()).toString();
+            boolean shouldShow = "All months".equals(selectedMonth) || transactionMonth.equals(selectedMonth);
+            if (shouldShow) {
+                visibleTransactions.add(transaction);
+            }
+        }
+        this.transactionTable.getItems().setAll(visibleTransactions);
+
+
     }
 
     /**

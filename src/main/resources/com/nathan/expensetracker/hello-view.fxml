@@ -20,14 +20,21 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-
-    <Label fx:id="welcomeText" alignment="TOP_LEFT" text="Expense Tracker">
-      <font>
-         <Font name="Avenir Black Oblique" size="38.0" />
-      </font>
-      <padding>
-         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-      </padding></Label>
+   <HBox prefHeight="100.0" prefWidth="200.0">
+      <children>
+      
+          <Label fx:id="welcomeText" alignment="TOP_LEFT" text="Expense Tracker">
+            <font>
+               <Font name="Avenir Black Oblique" size="38.0" />
+            </font>
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+         </Label>
+         <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+         <ComboBox fx:id="monthCombobox" prefWidth="150.0" />
+      </children>
+   </HBox>
    <Label text="A clearer view of your everyday spending" textFill="#667085">
       <font>
          <Font name="Avenir Black" size="13.0" />
