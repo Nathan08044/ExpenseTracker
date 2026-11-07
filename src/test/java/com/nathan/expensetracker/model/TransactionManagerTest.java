@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,6 +52,30 @@ class TransactionManagerTest {
         assertEquals(new BigDecimal("0.00"), manager.getTotalExpense());
         assertEquals(new BigDecimal("0.00"), manager.getBalance());
 
+    }
+
+    @Test
+    public void testGetTotalExpensesInMonth() {
+        TransactionManager theManager = new TransactionManager();
+
+        theManager.addTransaction(new Expense("Hamburger", new BigDecimal("15.50"), "Food", LocalDate.of(2026, 11,5)));
+        theManager.addTransaction(new Expense ("Hamburger", new BigDecimal("15.50"), "Food", LocalDate.of(2026,10,5)));
+        theManager.addTransaction(new Income ("Nail salary", new BigDecimal("1235"), "Salary", LocalDate.of(2026,11,5)));
+        BigDecimal actual = theManager.getTotalExpenseForMonth(YearMonth.of(2026, 11));
+
+        assertEquals(new BigDecimal("15.50"), actual);
+    }
+
+    @Test
+    public void testGetTotalIncomesInMonth() {
+        TransactionManager theManager = new TransactionManager();
+
+        theManager.addTransaction(new Expense("Hamburger", new BigDecimal("15.50"), "Food", LocalDate.of(2026, 11,5)));
+        theManager.addTransaction(new Expense ("Hamburger", new BigDecimal("15.50"), "Food", LocalDate.of(2026,10,5)));
+        theManager.addTransaction(new Income ("Nail salary", new BigDecimal("1235"), "Salary", LocalDate.of(2026,11,5)));
+        BigDecimal actual = theManager.getTotalIncomeForMonth(YearMonth.of(2026, 11));
+
+        assertEquals(new BigDecimal("1235"), actual);
     }
 
 }

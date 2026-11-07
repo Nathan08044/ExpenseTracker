@@ -1,6 +1,7 @@
 package com.nathan.expensetracker.model;
 
 import java.math.BigDecimal;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,5 +90,31 @@ public class TransactionManager {
             balance = balance.add(currentTransaction.getBalanceChange());
         }
         return balance;
+    }
+
+    public BigDecimal getTotalExpenseForMonth(YearMonth currentMonth) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Transaction currentTransaction : this.getTransactions()) {
+            boolean sameMonth = YearMonth.from(currentTransaction.getDate()).equals(currentMonth);
+
+            if (sameMonth && "Expense".equals(currentTransaction.getType())) {
+                total = total.add(currentTransaction.getAmount());
+
+            }
+        }
+        return total;
+    }
+
+    public BigDecimal getTotalIncomeForMonth(YearMonth currentMonth) {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Transaction currentTransaction : this.getTransactions()) {
+            boolean sameMonth = YearMonth.from(currentTransaction.getDate()).equals(currentMonth);
+
+            if (sameMonth && "Income".equals(currentTransaction.getType())) {
+                total = total.add(currentTransaction.getAmount());
+            }
+        }
+        return total;
     }
 }
