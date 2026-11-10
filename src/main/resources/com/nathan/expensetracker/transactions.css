@@ -34,6 +34,19 @@
 .table-view .table-row-cell:filled.expense-row .table-cell.amount-cell {
     -fx-text-fill: #C8103D;
 }
+.spending-chart .default-color0.chart-series-line{
+    -fx-stroke: #087A5C;
+}
+.spending-chart .default-color1.chart-series-line{
+    -fx-stroke: #C8103D;
+}
+.spending-chart .default-color0.chart-line-symbol{
+    -fx-background-color: #087A5C, white;
+}
+.spending-chart .default-color1.chart-line-symbol{
+    -fx-background-color: #C8103D, white;
+}
+
 
 
 

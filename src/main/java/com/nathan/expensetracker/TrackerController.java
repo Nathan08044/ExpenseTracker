@@ -5,9 +5,12 @@ import com.nathan.expensetracker.model.Income;
 import com.nathan.expensetracker.model.Transaction;
 import com.nathan.expensetracker.model.TransactionManager;
 import com.nathan.expensetracker.storage.TransactionFileStorage;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
 import java.io.IOException;
@@ -75,6 +78,9 @@ public class TrackerController {
 
     @FXML
     private Label transactionCountLabel;
+
+    @FXML
+    private LineChart<String, Number> spendingChart;
 
 
 
@@ -169,10 +175,45 @@ public class TrackerController {
             }
         });
         this.loadSavedTransactions();
+        this.updateSpendingChart();
         this.refreshMonthOptions();
         this.updateTable();
         this.updateTotal();
+        this.dateColumn.setSortType(TableColumn.SortType.DESCENDING);
+        this.transactionTable.getSortOrder().setAll(List.of(this.dateColumn));
 
+    }
+
+    private void updateSpendingChart() {
+        XYChart.Series<String, Number> incomeSeries = new XYChart.Series<>();
+        incomeSeries.setName("Income");
+
+        XYChart.Series<String, Number> expenseSeries = new XYChart.Series<>();
+        expenseSeries.setName("Expense");
+
+        YearMonth currentMonth = YearMonth.now();
+         for (int offset = 5; offset >= 0; offset--) {
+             YearMonth theMonth = currentMonth.minusMonths(offset);
+
+             XYChart.Data<String, Number> incomePoint = new XYChart.Data<>(theMonth.toString(),
+                     this.transactionManager.getTotalIncomeForMonth(theMonth));
+             incomePoint.nodeProperty().addListener((property, oldNode, newNode) -> {
+                 if (newNode != null) {
+                     Tooltip.install(newNode, new Tooltip("Income: $" + incomePoint.getYValue()));
+                 }
+             });
+             incomeSeries.getData().add(incomePoint);
+
+             XYChart.Data<String, Number> expensePoint = new XYChart.Data<>(theMonth.toString(),
+                     this.transactionManager.getTotalExpenseForMonth(theMonth));
+             expensePoint.nodeProperty().addListener((property, oldNode, newNode) -> {
+                 if (newNode != null) {
+                     Tooltip.install(newNode, new Tooltip("Expense: $" + expensePoint.getYValue()));
+                 }
+             });
+             expenseSeries.getData().add(expensePoint);
+         }
+         this.spendingChart.getData().setAll(List.of(incomeSeries,expenseSeries));
     }
 
     private void loadSavedTransactions(){
@@ -184,7 +225,8 @@ public class TrackerController {
         } catch (IOException | IllegalArgumentException | DateTimeParseException theException) {
             this.loadingFailed = true;
             Alert theAlert = new Alert(Alert.AlertType.ERROR, "Could not load saved transactions: " + theException.getMessage());
-            theAlert.showAndWait();
+            // initialize() runs before the main stage is shown.
+            Platform.runLater(() -> this.showAlert(theAlert));
         }
     }
 
@@ -197,7 +239,7 @@ public class TrackerController {
             return true;
         } catch (IOException theException) {
             Alert theAlert = new Alert(Alert.AlertType.ERROR, "Could not save the transaction: " + theException.getMessage());
-            theAlert.showAndWait();
+            this.showAlert(theAlert);
             return false;
         }
     }
@@ -254,11 +296,11 @@ public class TrackerController {
         } catch (NumberFormatException theException) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Enter a valid amount, such as 15.50");
-            alert.showAndWait();
+            this.showAlert(alert);
         } catch (IllegalArgumentException theException) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText(theException.getMessage());
-            alert.showAndWait();
+            this.showAlert(alert);
         }
     }
 
@@ -278,10 +320,6 @@ public class TrackerController {
 
     private void updateTable(){
         String selectedMonth = this.monthCombobox.getValue();
-
-        int count = this.transactionTable.getItems().size();
-        String word = (count == 1) ? "transaction" : "transactions";
-        this.transactionCountLabel.setText(count + " " + word);
         List<Transaction> visibleTransactions = new ArrayList<Transaction>();
         for (var transaction : this.transactionManager.getTransactions()) {
             String transactionMonth = YearMonth.from(transaction.getDate()).toString();
@@ -291,6 +329,10 @@ public class TrackerController {
             }
         }
         this.transactionTable.getItems().setAll(visibleTransactions);
+        int count = this.transactionTable.getItems().size();
+        String word = (count == 1) ? "transaction" : "transactions";
+        this.transactionCountLabel.setText(count + " " + word);
+        this.updateSpendingChart();
 
 
     }
@@ -304,7 +346,7 @@ public class TrackerController {
         if (selectedTransaction == null) {
             Alert theAlert = new Alert(Alert.AlertType.WARNING);
             theAlert.setContentText("Please select a transaction to delete.");
-            theAlert.showAndWait();
+            this.showAlert(theAlert);
             return;
         }
         List<Transaction> transactionsToSave = new ArrayList<>(this.transactionManager.getTransactions());
@@ -316,11 +358,17 @@ public class TrackerController {
         this.transactionManager.removeTransaction(selectedTransaction);
         this.updateTotal();
         this.updateTable();
+        this.updateSpendingChart();
     }
 
     /**
      * Clears the text fields after a successful addition.
      */
+    private void showAlert(Alert alert) {
+        alert.initOwner(this.transactionTable.getScene().getWindow());
+        alert.showAndWait();
+    }
+
     private void clearForm() {
         this.titleField.clear();
         this.amountField.clear();
