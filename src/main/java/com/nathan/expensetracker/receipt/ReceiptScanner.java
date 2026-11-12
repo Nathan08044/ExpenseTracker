@@ -20,11 +20,16 @@ public final class ReceiptScanner {
     public Result scan(Path image) throws IOException, InterruptedException {
         Path output = Files.createTempFile("receipt-ocr-", ".txt");
         try {
-            Process process = new ProcessBuilder(executable(), image.toAbsolutePath().toString(),
+            String bundledDirectory = System.getProperty("expenseTracker.ocrDir");
+            ProcessBuilder builder = new ProcessBuilder(executable(bundledDirectory), image.toAbsolutePath().toString(),
                     "stdout", "-l", "eng")
                     .redirectOutput(output.toFile())
-                    .redirectError(ProcessBuilder.Redirect.DISCARD)
-                    .start();
+                    .redirectError(ProcessBuilder.Redirect.DISCARD);
+            if (bundledDirectory != null) {
+                builder.environment().put("TESSDATA_PREFIX",
+                        java.nio.file.Paths.get(bundledDirectory, "tessdata").toString());
+            }
+            Process process = builder.start();
             try {
                 if (!process.waitFor(20, TimeUnit.SECONDS)) {
                     throw new IOException("Receipt scan timed out. Try a smaller image.");
@@ -43,7 +48,10 @@ public final class ReceiptScanner {
         }
     }
 
-    private String executable() {
+    private String executable(String bundledDirectory) {
+        if (bundledDirectory != null) {
+            return java.nio.file.Paths.get(bundledDirectory, "tesseract").toString();
+        }
         for (String path : new String[]{"/opt/homebrew/bin/tesseract", "/usr/local/bin/tesseract"}) {
             if (Files.isExecutable(java.nio.file.Paths.get(path))) {
                 return path;

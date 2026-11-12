@@ -30,7 +30,7 @@ public class TransactionFileStorageTest {
 
         List<String> savedLines = Files.readAllLines(filePath);
 
-        assertEquals(List.of("type, title, amount, category, date", "Expense,\"Lunch\",15.50,\"Food\",2026-10-31"), savedLines);
+        assertEquals(List.of("type,title,amount,category,date", "Expense,\"Lunch\",15.50,\"Food\",2026-10-31"), savedLines);
 
     }
 
