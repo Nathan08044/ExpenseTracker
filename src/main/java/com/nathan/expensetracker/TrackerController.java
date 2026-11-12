@@ -5,7 +5,10 @@ import com.nathan.expensetracker.model.Income;
 import com.nathan.expensetracker.model.Transaction;
 import com.nathan.expensetracker.model.TransactionManager;
 import com.nathan.expensetracker.storage.TransactionFileStorage;
+import com.nathan.expensetracker.receipt.ReceiptScanner;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.stage.FileChooser;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
@@ -260,6 +263,64 @@ public class TrackerController {
 
         this.balanceLabel.setText(this.currencyFormat.format(transactionManager.getBalance()));
 
+    }
+
+    @FXML
+    private void handleScanReceipt(javafx.event.ActionEvent event) {
+        var button = (Button) event.getSource();
+        var chooser = new FileChooser();
+        chooser.setTitle("Choose a receipt image");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
+                "Receipt images", "*.png", "*.jpg", "*.jpeg"));
+        var owner = button.getScene().getWindow();
+        var image = chooser.showOpenDialog(owner);
+        if (image == null) {
+            return;
+        }
+
+        var task = new Task<ReceiptScanner.Result>() {
+            @Override
+            protected ReceiptScanner.Result call() throws IOException, InterruptedException {
+                return new ReceiptScanner().scan(image.toPath());
+            }
+        };
+        button.setDisable(true);
+        button.setText("Scanning…");
+        task.setOnSucceeded(done -> {
+            button.setDisable(false);
+            button.setText("Scan receipt");
+            var result = task.getValue();
+            if (!result.merchant.isEmpty() && this.titleField.getText().trim().isEmpty()) {
+                this.titleField.setText(result.merchant);
+            }
+            if (!result.amount.isEmpty() && this.amountField.getText().trim().isEmpty()) {
+                this.amountField.setText(result.amount);
+            }
+            if (result.date != null) {
+                this.datePicker.setValue(result.date);
+            }
+            String message = "Review the receipt fields before adding the transaction.";
+            if (result.amount.isEmpty()) {
+                message += "\nNo clear total was found. Check the amount.";
+            }
+            if (result.date == null) {
+                message += "\nNo clear receipt date was found. Check the date.";
+            }
+            var alert = new Alert(Alert.AlertType.INFORMATION, message);
+            alert.initOwner(owner);
+            alert.show();
+        });
+        task.setOnFailed(failed -> {
+            button.setDisable(false);
+            button.setText("Scan receipt");
+            var alert = new Alert(Alert.AlertType.ERROR,
+                    "Could not scan receipt. Check that Tesseract is installed and try a clear image.");
+            alert.initOwner(owner);
+            alert.show();
+        });
+        var thread = new Thread(task, "receipt-scan");
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @FXML

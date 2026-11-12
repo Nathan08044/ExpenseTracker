@@ -175,6 +175,7 @@
                      <DatePicker fx:id="datePicker" promptText="Date" />
                   </children>
                </VBox>
+               <Button mnemonicParsing="false" onAction="#handleScanReceipt" text="Scan receipt" />
                <Button fx:id="addButton" alignment="TOP_LEFT" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleAddTransaction" style="-fx-background-color: #4355D4; -fx-text-fill: white; -fx-background-radius: 8;" text="Add transaction" />
             </children>
          </HBox>
